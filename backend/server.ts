@@ -22,9 +22,13 @@ app.use(async (req, res, next) => {
   try {
     await connectDB();
     next();
-  } catch (error) {
+  } catch (error: any) {
     console.error("Database connection error:", error);
-    res.status(500).json({ error: "Database connection failed" });
+    res.status(500).json({
+      error: "Database connection failed",
+      details: error?.message || String(error) || "unknown",
+      hasEnv: Boolean(process.env.MONGODB_URI),
+    });
   }
 });
 
