@@ -270,6 +270,18 @@ app.use((err: any, _req: express.Request, res: express.Response, _next: express.
   res.status(500).json({ error: "Internal Server Error" });
 });
 
+// Health check endpoint to diagnose DB connectivity in production
+app.get("/api/health", async (_req, res) => {
+  try {
+    await connectDB();
+    const state = mongoose.connection.readyState; // 1 = connected, 2 = connecting
+    res.json({ ok: true, mongoState: state });
+  } catch (e: any) {
+    console.error("Health check DB error:", e);
+    res.status(500).json({ ok: false, error: e?.message || "DB error" });
+  }
+});
+
 // Delete (hard)
 app.delete("/api/bookings/:id", async (req, res) => {
   try {
