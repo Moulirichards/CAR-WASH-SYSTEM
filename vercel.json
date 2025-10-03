@@ -7,9 +7,5 @@
   "routes": [
     { "src": "/api/(.*)", "dest": "backend/server.ts" },
     { "src": "/(.*)", "dest": "/index.html" }
-  ],
-  "env": {
-    "MONGODB_URI": "@mongodb_uri",
-    "PORT": "3001"
-  }
+  ]
 }
