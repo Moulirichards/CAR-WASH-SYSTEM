@@ -109,10 +109,6 @@ pnpm install
 Create a `.env` file in the root directory:
 ```env
 MONGODB_URI=mongodb://localhost:27017/carwash-bookings
-# or for MongoDB Atlas:
-# MONGODB_URI=mongodb+srv://username:password@cluster.mongodb.net/carwash-bookings
-
-PORT=3001
 ```
 
 ### 4. Start the Development Servers
