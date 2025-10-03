@@ -233,9 +233,14 @@ app.delete("/api/bookings/:id", async (req, res) => {
   }
 });
 
-const port = Number(process.env.PORT || 3001);
-app.listen(port, () => {
-  console.log(`API listening on http://localhost:${port}`);
-});
+// In serverless environments (e.g., Vercel), we export the app as the handler
+// and avoid calling app.listen(). For local development, start the server.
+const isVercel = Boolean(process.env.VERCEL);
+if (!isVercel) {
+  const port = Number(process.env.PORT || 3001);
+  app.listen(port, () => {
+    console.log(`API listening on http://localhost:${port}`);
+  });
+}
 
-
+export default app;
