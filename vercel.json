@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "functions": {
+    "backend/server.ts": {
+      "runtime": "nodejs20.x",
+      "memory": 1024,
+      "maxDuration": 10
+    }
+  },
+  "builds": [
+    { "src": "backend/server.ts", "use": "@vercel/node" },
+    { "src": "package.json", "use": "@vercel/static-build", "config": { "distDir": "dist" } }
+  ],
+  "routes": [
+    { "src": "/api/(.*)", "dest": "backend/server.ts" },
+    { "src": "/(.*)", "dest": "/index.html" }
+  ],
+  "env": {
+    "MONGODB_URI": "@mongodb_uri",
+    "PORT": "3001"
+  }
+}
