@@ -7,20 +7,68 @@ import { z } from "zod";
 
 dotenv.config();
 
+// Type declaration for global mongoose cache
+declare global {
+  var mongoose: any;
+}
+
 const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(morgan("dev"));
 
+// Middleware to ensure DB connection
+app.use(async (req, res, next) => {
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    console.error("Database connection error:", error);
+    res.status(500).json({ error: "Database connection failed" });
+  }
+});
+
 const mongoUri = process.env.MONGODB_URI || "mongodb://127.0.0.1:27017/sparkle-drive";
 mongoose.set("strictQuery", true);
-mongoose
-  .connect(mongoUri)
-  .then(() => console.log("MongoDB connected"))
-  .catch((err) => {
-    console.error("MongoDB connection error", err);
+
+// Cache the connection to avoid reconnecting on each request in serverless
+let cached = global.mongoose;
+if (!cached) {
+  cached = global.mongoose = { conn: null, promise: null };
+}
+
+async function connectDB() {
+  if (cached.conn) {
+    return cached.conn;
+  }
+  if (!cached.promise) {
+    const opts = {
+      bufferCommands: false,
+      maxPoolSize: 10,
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+    };
+    cached.promise = mongoose.connect(mongoUri, opts).then((mongoose) => {
+      console.log("MongoDB connected");
+      return mongoose;
+    });
+  }
+  try {
+    cached.conn = await cached.promise;
+  } catch (e) {
+    cached.promise = null;
+    throw e;
+  }
+  return cached.conn;
+}
+
+// Connect to MongoDB
+connectDB().catch((err) => {
+  console.error("MongoDB connection error", err);
+  if (!process.env.VERCEL) {
     process.exit(1);
-  });
+  }
+});
 
 const bookingSchema = new mongoose.Schema(
   {
