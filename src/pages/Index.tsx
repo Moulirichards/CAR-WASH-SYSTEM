@@ -73,32 +73,72 @@ const Index = () => {
   return (
     <div className="min-h-screen bg-background">
       {/* Hero Section */}
-      <div className="relative h-[400px] overflow-hidden">
+      <div className="relative h-[500px] overflow-hidden">
         <img
           src={heroImage}
           alt="Professional car wash service"
           className="w-full h-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/90 to-primary-glow/70" />
+        {/* Enhanced gradient overlay with realistic depth */}
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/85 via-primary/75 to-primary-glow/80" />
+        <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
+        
+        {/* Floating particles effect */}
+        <div className="absolute inset-0">
+          <div className="absolute top-1/4 left-1/4 w-2 h-2 bg-white/40 rounded-full animate-pulse"></div>
+          <div className="absolute top-1/3 right-1/3 w-1 h-1 bg-white/60 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
+          <div className="absolute bottom-1/4 left-1/3 w-1.5 h-1.5 bg-white/30 rounded-full animate-pulse" style={{ animationDelay: '2s' }}></div>
+          <div className="absolute top-2/3 right-1/4 w-1 h-1 bg-white/50 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+        </div>
+        
         <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center text-white space-y-4 px-4">
-            <h1 className="text-5xl md:text-6xl font-bold tracking-tight">Sparkle Drive</h1>
-            <p className="text-xl md:text-2xl font-light">Premium Car Wash & Detailing Services</p>
+          <div className="text-center text-white space-y-6 px-4 max-w-4xl mx-auto">
+            <div className="space-y-4">
+              <h1 className="text-6xl md:text-7xl font-black tracking-tight drop-shadow-2xl">
+                Sparkle Drive
+              </h1>
+              <div className="w-24 h-1 bg-gradient-to-r from-white to-white/60 mx-auto rounded-full"></div>
+            </div>
+            <p className="text-xl md:text-3xl font-light drop-shadow-lg max-w-2xl mx-auto leading-relaxed">
+              Premium Car Wash & Detailing Services
+            </p>
+            <div className="flex justify-center space-x-4 mt-8">
+              <div className="w-3 h-3 bg-white/80 rounded-full animate-pulse"></div>
+              <div className="w-3 h-3 bg-white/60 rounded-full animate-pulse" style={{ animationDelay: '0.5s' }}></div>
+              <div className="w-3 h-3 bg-white/40 rounded-full animate-pulse" style={{ animationDelay: '1s' }}></div>
+            </div>
           </div>
         </div>
+        
+        {/* Subtle bottom gradient for seamless transition */}
+        <div className="absolute bottom-0 left-0 right-0 h-20 bg-gradient-to-t from-background to-transparent"></div>
       </div>
 
       {/* Main Content */}
       <div className="container mx-auto px-4 py-8 space-y-8">
         {/* Header with Add Button */}
         <div className="flex justify-between items-center">
-          <div>
-            <h2 className="text-3xl font-bold text-foreground">Bookings</h2>
-            <p className="text-muted-foreground mt-1">Manage and view all car wash bookings</p>
+          <div className="space-y-3">
+            <div className="space-y-2">
+              <h2 className="text-4xl font-black text-foreground drop-shadow-sm">
+                Bookings
+              </h2>
+              <p className="text-lg text-muted-foreground font-medium">
+                Manage and view all car wash bookings
+              </p>
+            </div>
+            <div className="flex items-center gap-4">
+              <div className="w-20 h-1 bg-gradient-to-r from-primary via-primary-glow to-accent rounded-full"></div>
+              <div className="w-2 h-2 bg-primary rounded-full animate-pulse"></div>
+            </div>
           </div>
-          <Button className="bg-gradient-to-r from-primary to-primary-glow hover:opacity-90" onClick={() => setIsNewOpen(true)}>
-            <Plus className="h-5 w-5 mr-2" />
-            New Booking
+          <Button 
+            className="bg-gradient-to-r from-primary via-primary-glow to-accent hover:shadow-2xl hover:scale-105 transition-all duration-300 text-white font-bold px-8 py-3 rounded-xl relative overflow-hidden group" 
+            onClick={() => setIsNewOpen(true)}
+          >
+            <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+            <Plus className="h-5 w-5 mr-2 relative z-10" />
+            <span className="relative z-10">New Booking</span>
           </Button>
         </div>
 
@@ -146,14 +186,19 @@ const Index = () => {
         ) : paginatedBookings && paginatedBookings.length > 0 ? (
           <>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-              {paginatedBookings.map((booking) => (
-                <BookingCard
+              {paginatedBookings.map((booking, index) => (
+                <div
                   key={booking._id || booking.id}
-                  booking={booking}
-                  onEdit={handleEdit}
-                  onDelete={handleDelete}
-                  onClick={handleClick}
-                />
+                  className="animate-in slide-in-from-bottom-4 fade-in duration-500"
+                  style={{ animationDelay: `${index * 100}ms` }}
+                >
+                  <BookingCard
+                    booking={booking}
+                    onEdit={handleEdit}
+                    onDelete={handleDelete}
+                    onClick={handleClick}
+                  />
+                </div>
               ))}
             </div>
 
@@ -164,6 +209,7 @@ const Index = () => {
                   variant="outline"
                   onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                   disabled={currentPage === 1}
+                  className="hover:border-primary/50 hover:bg-primary/5 transition-all duration-300"
                 >
                   Previous
                 </Button>
@@ -173,7 +219,11 @@ const Index = () => {
                       key={page}
                       variant={currentPage === page ? "default" : "outline"}
                       onClick={() => setCurrentPage(page)}
-                      className={currentPage === page ? "bg-gradient-to-r from-primary to-primary-glow" : ""}
+                      className={`transition-all duration-300 ${
+                        currentPage === page 
+                          ? "bg-gradient-to-r from-primary to-primary-glow hover:shadow-lg" 
+                          : "hover:border-primary/50 hover:bg-primary/5"
+                      }`}
                     >
                       {page}
                     </Button>
@@ -183,6 +233,7 @@ const Index = () => {
                   variant="outline"
                   onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
                   disabled={currentPage === totalPages}
+                  className="hover:border-primary/50 hover:bg-primary/5 transition-all duration-300"
                 >
                   Next
                 </Button>
@@ -190,9 +241,29 @@ const Index = () => {
             )}
           </>
         ) : (
-          <div className="text-center py-12 bg-card rounded-lg border border-border/50">
-            <p className="text-muted-foreground text-lg">No bookings found</p>
-            <p className="text-muted-foreground text-sm mt-2">Create your first booking to get started</p>
+          <div className="text-center py-20 bg-gradient-to-br from-card via-card/98 to-card/95 rounded-2xl border border-border/30 shadow-xl">
+            <div className="space-y-6">
+              <div className="relative">
+                <div className="w-20 h-20 bg-gradient-to-br from-primary via-primary-glow to-accent rounded-full mx-auto flex items-center justify-center shadow-2xl">
+                  <Plus className="h-10 w-10 text-white" />
+                </div>
+                <div className="absolute inset-0 w-20 h-20 bg-gradient-to-br from-primary/30 to-accent/30 rounded-full mx-auto animate-ping"></div>
+              </div>
+              <div className="space-y-2">
+                <h3 className="text-2xl font-black text-foreground">No bookings found</h3>
+                <p className="text-lg text-muted-foreground font-medium">Create your first booking to get started</p>
+              </div>
+              <div className="flex justify-center">
+                <Button 
+                  className="bg-gradient-to-r from-primary via-primary-glow to-accent hover:shadow-2xl hover:scale-110 transition-all duration-300 text-white font-bold px-8 py-4 rounded-xl relative overflow-hidden group"
+                  onClick={() => setIsNewOpen(true)}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                  <Plus className="h-5 w-5 mr-2 relative z-10" />
+                  <span className="relative z-10">Create First Booking</span>
+                </Button>
+              </div>
+            </div>
           </div>
         )}
       </div>

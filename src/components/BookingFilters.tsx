@@ -37,25 +37,25 @@ export const BookingFilters = ({
   onSortByChange,
 }: BookingFiltersProps) => {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 p-6 bg-card rounded-lg border border-border/50 shadow-sm">
-      <div className="space-y-2">
-        <Label htmlFor="search">Search</Label>
-        <div className="relative">
-          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-6 p-8 bg-gradient-to-br from-card via-card/98 to-card/95 rounded-2xl border-2 border-border/50 shadow-lg hover:shadow-xl transition-all duration-500 backdrop-blur-sm">
+      <div className="space-y-3">
+        <Label htmlFor="search" className="text-sm font-bold text-foreground uppercase tracking-wider">Search</Label>
+        <div className="relative group">
+          <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-primary group-hover:scale-110 transition-transform duration-300" />
           <Input
             id="search"
             placeholder="Customer or car details..."
             value={searchQuery}
             onChange={(e) => onSearchChange(e.target.value)}
-            className="pl-9"
+            className="pl-10 pr-4 py-3 bg-background/50 hover:bg-background/80 hover:border-primary/50 focus:border-primary focus:bg-background transition-all duration-300 rounded-xl border-2 shadow-sm hover:shadow-md"
           />
         </div>
       </div>
 
-      <div className="space-y-2">
-        <Label htmlFor="service-type">Service Type</Label>
+      <div className="space-y-3">
+        <Label htmlFor="service-type" className="text-sm font-bold text-foreground uppercase tracking-wider">Service Type</Label>
         <Select value={serviceType} onValueChange={onServiceTypeChange}>
-          <SelectTrigger id="service-type">
+          <SelectTrigger id="service-type" className="py-3 bg-background/50 hover:bg-background/80 hover:border-primary/50 focus:border-primary transition-all duration-300 rounded-xl border-2 shadow-sm hover:shadow-md">
             <SelectValue placeholder="All Services" />
           </SelectTrigger>
           <SelectContent>

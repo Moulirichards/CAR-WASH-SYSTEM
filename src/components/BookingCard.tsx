@@ -64,56 +64,76 @@ export const BookingCard = ({ booking, onEdit, onDelete, onClick }: BookingCardP
   const priceLabel = typeof rawPrice === "number" ? `$${rawPrice.toFixed(2)}` : String(rawPrice ?? "");
   return (
     <Card 
-      className="p-6 hover:shadow-lg transition-all duration-300 cursor-pointer border-border/50 bg-gradient-to-br from-card to-card/95"
-      style={{ boxShadow: "var(--shadow-card)" }}
+      className="group p-6 hover:shadow-2xl transition-all duration-500 cursor-pointer border-border/30 bg-gradient-to-br from-card via-card/98 to-card/95 hover:-translate-y-2 hover:border-primary/30 relative overflow-hidden backdrop-blur-sm"
+      style={{ 
+        boxShadow: "0 8px 32px rgba(0,0,0,0.08), 0 4px 16px rgba(0,0,0,0.04)",
+        background: "linear-gradient(145deg, hsl(var(--card)), hsl(var(--card) / 0.95))"
+      }}
       onClick={() => onClick(id)}
     >
-      <div className="space-y-4">
+      {/* Realistic material overlay */}
+      <div className="absolute inset-0 bg-gradient-to-br from-primary/3 via-transparent to-primary-glow/2 opacity-0 group-hover:opacity-100 transition-all duration-500"></div>
+      
+      {/* Subtle inner glow */}
+      <div className="absolute inset-0 rounded-lg bg-gradient-to-br from-white/10 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+      <div className="space-y-4 relative z-10">
         <div className="flex items-start justify-between">
-          <div className="space-y-1">
-            <h3 className="text-xl font-bold text-foreground">{customerName}</h3>
-            <div className="flex items-center gap-2 text-muted-foreground">
-              <Car className="h-4 w-4" />
-              <span className="text-sm">{carType ? (carTypeLabels as any)[carType] || carType : ""}</span>
+          <div className="space-y-3">
+            <h3 className="text-xl font-bold text-foreground group-hover:text-primary transition-all duration-300 drop-shadow-sm">
+              {customerName}
+            </h3>
+            <div className="flex items-center gap-3 text-muted-foreground">
+              <div className="flex items-center gap-2 bg-primary/10 px-2 py-1 rounded-lg">
+                <Car className="h-4 w-4 text-primary" />
+                <span className="text-sm font-semibold">{carType ? (carTypeLabels as any)[carType] || carType : ""}</span>
+              </div>
               {carDetailsText && (
-                <span className="text-sm">• {carDetailsText}</span>
+                <span className="text-sm bg-muted/50 px-2 py-1 rounded-md">• {carDetailsText}</span>
               )}
             </div>
           </div>
-          <Badge className={statusColors[statusKey] || statusColors["pending"]}>
+          <Badge className={`${statusColors[statusKey] || statusColors["pending"]} group-hover:scale-110 transition-all duration-300 shadow-lg font-semibold px-3 py-1`}>
             {rawStatus ? rawStatus.charAt(0).toUpperCase() + rawStatus.slice(1) : ""}
           </Badge>
         </div>
 
-        <div className="space-y-2">
-          <div className="flex items-center gap-2 text-sm text-foreground">
-            <Calendar className="h-4 w-4 text-primary" />
-            <span>{dateLabel}</span>
-          </div>
-          <div className="flex items-center gap-2 text-sm text-foreground">
-            <Clock className="h-4 w-4 text-primary" />
-            <span>{timeSlot} {duration ? `(${duration} min)` : ""}</span>
+        <div className="space-y-3">
+          <div className="flex items-center gap-3 text-sm">
+            <div className="flex items-center gap-2 bg-blue-50 dark:bg-blue-950/30 px-3 py-2 rounded-lg">
+              <Calendar className="h-4 w-4 text-blue-600 dark:text-blue-400" />
+              <span className="font-medium text-foreground">{dateLabel}</span>
+            </div>
+            <div className="flex items-center gap-2 bg-green-50 dark:bg-green-950/30 px-3 py-2 rounded-lg">
+              <Clock className="h-4 w-4 text-green-600 dark:text-green-400" />
+              <span className="font-medium text-foreground">{timeSlot} {duration ? `(${duration} min)` : ""}</span>
+            </div>
           </div>
         </div>
 
-        <div className="pt-4 border-t border-border/50">
+        <div className="pt-4 border-t border-border/30 relative">
           <div className="flex items-center justify-between">
-            <div>
-              <p className="text-sm text-muted-foreground">Service</p>
-              <p className="font-semibold text-foreground">{serviceLabel}</p>
+            <div className="space-y-1">
+              <p className="text-xs text-muted-foreground font-semibold uppercase tracking-wider">Service</p>
+              <p className="font-bold text-foreground group-hover:text-primary transition-all duration-300 text-lg">
+                {serviceLabel}
+              </p>
             </div>
-            <div className="flex items-center gap-2 text-primary">
-              <DollarSign className="h-5 w-5" />
-              <span className="text-2xl font-bold">{priceLabel}</span>
+            <div className="flex items-center gap-2 text-primary group-hover:scale-110 transition-all duration-300">
+              <div className="p-2 bg-primary/10 rounded-full">
+                <DollarSign className="h-5 w-5" />
+              </div>
+              <span className="text-3xl font-black bg-gradient-to-r from-primary via-primary-glow to-accent bg-clip-text text-transparent drop-shadow-sm">
+                {priceLabel}
+              </span>
             </div>
           </div>
         </div>
 
-        <div className="flex gap-2 pt-2" onClick={(e) => e.stopPropagation()}>
+        <div className="flex gap-3 pt-4" onClick={(e) => e.stopPropagation()}>
           <Button
             variant="outline"
             size="sm"
-            className="flex-1"
+            className="flex-1 hover:bg-primary/8 hover:border-primary/40 hover:text-foreground hover:shadow-lg transition-all duration-300 hover:scale-105 font-semibold"
             onClick={() => onEdit(id)}
           >
             <Edit className="h-4 w-4 mr-2" />
@@ -122,7 +142,7 @@ export const BookingCard = ({ booking, onEdit, onDelete, onClick }: BookingCardP
           <Button
             variant="destructive"
             size="sm"
-            className="flex-1"
+            className="flex-1 hover:scale-105 hover:shadow-lg transition-all duration-300 font-semibold"
             onClick={() => onDelete(id)}
           >
             <Trash2 className="h-4 w-4 mr-2" />
