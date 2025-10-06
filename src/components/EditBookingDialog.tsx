@@ -52,6 +52,26 @@ export function EditBookingDialog({ open, onOpenChange, booking, onUpdated }: Ed
     }
   }, [booking]);
 
+  // Function to determine status based on date
+  const getStatusBasedOnDate = (dateString: string) => {
+    if (!dateString) return "Pending";
+    
+    const bookingDate = new Date(dateString);
+    const today = new Date();
+    
+    // Reset time to compare only dates
+    bookingDate.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
+    
+    if (bookingDate < today) {
+      return "Completed"; // Past date
+    } else if (bookingDate.getTime() === today.getTime()) {
+      return "Confirmed"; // Today
+    } else {
+      return "Pending"; // Future date
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!booking?._id && !booking?.id) return;
@@ -68,6 +88,9 @@ export function EditBookingDialog({ open, onOpenChange, booking, onUpdated }: Ed
       if (carModel) carDetailsObj.model = carModel;
       if (carYear) carDetailsObj.year = Number(carYear);
 
+      // Auto-determine status based on date
+      const autoStatus = getStatusBasedOnDate(bookingDate);
+
       await api(`/api/bookings/${booking._id || booking.id}`, {
         method: "PUT",
         body: JSON.stringify({
@@ -78,7 +101,7 @@ export function EditBookingDialog({ open, onOpenChange, booking, onUpdated }: Ed
           timeSlot,
           duration: Number(duration) || 60,
           price: Number(price),
-          status,
+          status: autoStatus,
           rating: rating ? Number(rating) : undefined,
           addOns: addOns.length > 0 ? addOns : undefined,
         }),
@@ -153,6 +176,11 @@ export function EditBookingDialog({ open, onOpenChange, booking, onUpdated }: Ed
             <div className="space-y-2">
               <Label htmlFor="edit_booking_date">Booking Date</Label>
               <Input id="edit_booking_date" name="date" type="date" value={bookingDate} onChange={(e) => setBookingDate(e.target.value)} required />
+              {bookingDate && (
+                <div className="text-sm text-muted-foreground">
+                  Status will be automatically set to: <span className="font-semibold text-primary">{getStatusBasedOnDate(bookingDate)}</span>
+                </div>
+              )}
             </div>
             <div className="space-y-2">
               <Label htmlFor="edit_time_slot">Time Slot</Label>
