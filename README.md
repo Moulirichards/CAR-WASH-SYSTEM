@@ -212,27 +212,10 @@ DELETE /api/bookings/:id
 }
 ```
 
-## 📸 Screenshots
-
-### Homepage - Booking List
-![Homepage](https://via.placeholder.com/800x400/1e40af/ffffff?text=Homepage+-+Booking+List)
-
-### New Booking Dialog
-![New Booking](https://via.placeholder.com/600x500/059669/ffffff?text=New+Booking+Dialog)
-
-### Booking Details Page
-![Booking Details](https://via.placeholder.com/800x600/7c3aed/ffffff?text=Booking+Details+Page)
-
-### Invoice Generation
-![Invoice](https://via.placeholder.com/600x400/dc2626/ffffff?text=PDF+Invoice+Generation)
-
-### Mobile Responsive View
-![Mobile](https://via.placeholder.com/400x600/ea580c/ffffff?text=Mobile+Responsive)
-
 ## 🌐 Live Demo
 
 ### Production Deployment
-- **Live Application**: [Coming Soon]
+- **Live Application**: https://car-wash-system-ten.vercel.app/
 - **API Endpoint**: [Coming Soon]
 
 ### Development
